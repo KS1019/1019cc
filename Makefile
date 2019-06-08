@@ -1,7 +1,7 @@
-9cc: 9cc.c
+1019cc: 1019cc.c
 
-test: 9cc
-        ./test.sh
+test: 1019cc
+	./test.sh
 
 clean:
-		rm -f 9cc *.o *~ tmp*
+	rm -f 1019cc *.o *~ tmp*
