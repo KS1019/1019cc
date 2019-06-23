@@ -42,64 +42,11 @@ Node *new_node_num(int val) {
   return node;
 }
 
-Node *expr() {
-  Node *node = mul();
-
-  for (;;) {
-    if (consume('+'))
-      node = new_node('+', node, mul());
-    else if (consume('-'))
-      node = new_node('-', node, mul());
-    else
-      return node;
-  }
-}
-
-Node *mul() {
-  Node *node = term();
-
-  for (;;) {
-    if (consume('*'))
-      node = new_node('*', node, term());
-    else if (consume('/'))
-      node = new_node('/', node, term());
-    else
-      return node;
-  }
-}
-
-Node *term() {
-  // 次のトークンが'('なら、"(" expr ")"のはず
-  if (consume('(')) {
-    Node *node = expr();
-    if (!consume(')'))
-      error_at(tokens[pos].input,
-               "開きカッコに対応する閉じカッコがありません");
-    return node;
-  }
-
-  // そうでなければ数値のはず
-  if (tokens[pos].ty == TK_NUM)
-    return new_node_num(tokens[pos++].val);
-
-  error_at(tokens[pos].input,
-           "数値でも開きカッコでもないトークンです");
-}
-
-
 // 入力プログラム
 char *user_input;
 
 Token tokens[100];
 
-int consume(int ty) {
-  if (tokens[pos].ty != ty)
-    return 0;
-  pos++;
-  return 1;
-}
-
-// エラーを報告するための関数
 // printfと同じ引数を取る
 void error(char *fmt, ...) {
   va_list ap;
