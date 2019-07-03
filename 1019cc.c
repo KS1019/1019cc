@@ -65,7 +65,7 @@ bool consume(char op) {
 // それ以外の場合にはエラーを報告する。
 void expect(char op) {
   if (token->kind != TK_RESERVED || token->str[0] != op)
-    error("'%c'ではありません", op);
+    error_at(token->str, "数ではありません");
   token = token->next;
 }
 
@@ -73,7 +73,7 @@ void expect(char op) {
 // それ以外の場合にはエラーを報告する。
 int expect_number() {
   if (token->kind != TK_NUM)
-    error("数ではありません");
+  	error_at(token->str, "数ではありません");
   int val = token->val;
   token = token->next;
   return val;
@@ -115,8 +115,8 @@ Token *tokenize(char *p) {
       cur->val = strtol(p, &p, 10);
       continue;
     }
-
-    error("トークナイズできません");
+	
+	error_at(p, "トークナイズできません");
   }
 
   new_token(TK_EOF, cur, p);
@@ -125,7 +125,7 @@ Token *tokenize(char *p) {
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    error("引数の個数が正しくありません");
+	error_at(token->str, "引数の個数が正しくありません");
     return 1;
   }
 
