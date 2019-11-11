@@ -164,7 +164,7 @@ void error(char *fmt, ...)
 
 // 次のトークンが期待している記号のときには、トークンを1つ読み進めて
 // 真を返す。それ以外の場合には偽を返す。
-bool consume(char ＊op)
+bool consume(char *op)
 {
   if (token->kind != TK_RESERVED || strlen(op) != token->len || memcmp(token->str, op, token->len))
     return false;
@@ -237,7 +237,7 @@ Token *tokenize(char *p)
     }
 
     // 一文字記号
-    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')')
+    if (strchr("+-*/()<>", *p))
     {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
