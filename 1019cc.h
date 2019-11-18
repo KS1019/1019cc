@@ -62,7 +62,7 @@ Node *unary();
 Node *code[100];
 
 // 現在着目しているトークン
-Token *token;
+extern Token *token;
 
 // 入力プログラム
 extern char *user_input;

@@ -1,6 +1,7 @@
 #include "1019cc.h"
 
 char *user_input;
+Token *token;
 
 Node *new_node(NodeKind kind)
 {
