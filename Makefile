@@ -11,6 +11,6 @@ test: 1019cc
 	./test.sh
 
 clean:
-	rm -f 1019cc *.o *~ tmp*
+	rm -f 1019cc *.o *~ tmp* core* a.out
 
 .PHONY: test clean
