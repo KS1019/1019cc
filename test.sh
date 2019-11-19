@@ -46,4 +46,8 @@ try 0  '1>=2;'
 
 try 3  '1; 2; 3;'
 
+try 14 'return 14;'
+
+try 1  'return 1; 2;'
+
 echo OK

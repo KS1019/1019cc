@@ -5,6 +5,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct LVar LVar;
+
+// ローカル変数の型
+struct LVar {
+  LVar *next; // 次の変数かNULL
+  char *name; // 変数の名前
+  int len;    // 名前の長さ
+  int offset; // RBPからのオフセット
+};
+
+// ローカル変数
+LVar *locals;
+
 // トークンの種類
 typedef enum
 {
@@ -39,6 +52,7 @@ typedef enum
   ND_ASSIGN, // =
   ND_LVAR,   // ローカル変数
   ND_NUM, // 整数
+  ND_RETURN, // Return文
 } NodeKind;
 
 typedef struct Node Node;

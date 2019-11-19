@@ -15,6 +15,13 @@ void gen(Node *node)
   case ND_NUM:
     printf("  push %d\n", node->val);
     return;
+  case ND_RETURN:
+    gen(node->lhs);
+    printf("  pop rax\n");
+    printf("  mov rsp, rbp\n");
+    printf("  pop rbp\n");
+    printf("  ret\n");
+    return;
   case ND_LVAR:
     gen_lval(node);
     printf("  pop rax\n");
