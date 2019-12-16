@@ -50,4 +50,7 @@ try 14 'return 14;'
 
 try 1  'return 1; 2;'
 
+try 3  'a=3; return 3;'
+try 8  'a=3; z=5; return a + z;'
+
 echo OK

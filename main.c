@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   // トークナイズしてパースする
   user_input = argv[1];
   token = tokenize();
-  program();
+  Node *node = program();
 
   // アセンブリの前半部分を出力
   printf(".intel_syntax noprefix\n");
@@ -24,15 +24,11 @@ int main(int argc, char **argv)
   printf("  push rbp\n");
   printf("  mov rbp, rsp\n");
   printf("  sub rsp, 208\n");
-  
-  // 先頭の式から順にコード生成
-  for (int i = 0; code[i] != NULL; i++) {
-    gen(code[i]);
 
-    // 式の評価結果としてスタックに一つの値が残っている
-    // はずなので、スタックが溢れないようにポップしておく
-    printf("  pop rax\n");
-  }
+  for (Node *n = node; n; n = n->next)
+    gen(n);
+
+  printf(".L.return:\n");
   printf("  mov rsp, rbp\n");
   printf("  pop rbp\n");
   printf("  ret\n");

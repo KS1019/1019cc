@@ -18,6 +18,13 @@ Node *new_node(NodeKind kind)
   return node;
 }
 
+static Node *new_var_node(char name) {
+   Node *node = new_node(ND_VAR);
+   node->name = name;
+   return node;
+}
+
+
 Node *new_num(int val)
 {
   Node *node = new_node(ND_NUM);
@@ -30,6 +37,13 @@ Node *new_binary(NodeKind kind, Node *lhs, Node *rhs)
   Node *node = new_node(kind);
   node->lhs = lhs;
   node->rhs = rhs;
+  return node;
+}
+
+Node *new_unary(NodeKind kind, Node *expr)
+{
+  Node *node = new_node(kind);
+  node->lhs = expr;
   return node;
 }
 
@@ -202,24 +216,8 @@ Node *primary()
   }
 
   Token *tok = consume_ident();
-  if (tok) {
-    Node *node = calloc(1, sizeof(Node));
-    node->kind = ND_LVAR;
-    
-    LVar *lvar = find_lvar(tok);
-    if (lvar) {
-      node->offset = lvar->offset;
-    } else {
-      lvar = calloc(1, sizeof(LVar));
-      lvar->next = locals;
-      lvar->name = tok->str;
-      lvar->len = tok->len;
-      lvar->offset = locals->offset + 8;
-      node->offset = lvar->offset;
-      locals = lvar;
-    }
-    return node;
-  }
+  if (tok)
+    return new_var_node(*tok->str);
 
   // そうでなければ数値のはず
   return new_num(expect_number());
@@ -247,15 +245,13 @@ Node *expr()
 
 Node *stmt()
 {
-  Node *node;
-
   if (consume("return")) {
-    node = calloc(1, sizeof(Node));
-    node->kind = ND_RETURN;
-    node->lhs = expr();
-  } else {
-    node = expr();
+    Node *node = new_unary(ND_RETURN, expr());
+    expect(";");
+    return node;
   }
+      
+  Node *node = new_unary(ND_EXPR_STMT, expr());
   if (!consume(";"))
     error_at(token->str, "';'ではないトークンです");
   return node;
@@ -316,9 +312,13 @@ Node *unary()
   return primary();
 }
 
-void program() {
-  int i = 0;
-  while (!at_eof())
-    code[i++] = stmt();
-  code[i] = NULL;
+Node *program() {
+   Node head = {};
+   Node *cur = &head;
+
+  while (!at_eof()) {
+    cur->next = stmt();
+    cur = cur->next;
+  }
+  return head.next;
 }

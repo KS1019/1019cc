@@ -50,9 +50,10 @@ typedef enum
   ND_LT,  // <
   ND_LE,  // <=
   ND_ASSIGN, // =
-  ND_LVAR,   // ローカル変数
+  ND_VAR,   // ローカル変数
   ND_NUM, // 整数
   ND_RETURN, // Return文
+  ND_EXPR_STMT, // Expression Statement
 } NodeKind;
 
 typedef struct Node Node;
@@ -62,11 +63,13 @@ struct Node
   NodeKind kind; // ノードの型
   Node *lhs;     // 左辺
   Node *rhs;     // 右辺
+  Node *next;    // 次
+  char name;     // 
   int val;       // kindがND_NUMの場合のみ使う
   int offset;    // kindがND_LVARの場合のみ使う
 };
 
-
+Node *program();
 Node *expr();
 Node *equality();
 Node *relational();
@@ -90,4 +93,4 @@ bool at_eof();
 Token *tokenize();
 
 void gen(Node *node);
-void program();
+// void program();
