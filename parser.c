@@ -33,6 +33,12 @@ Node *new_binary(NodeKind kind, Node *lhs, Node *rhs)
   return node;
 }
 
+static Node *new_var_node(char name) {
+   Node *node = new_node(ND_LVAR);
+   node->name = name;
+   return node;
+ }
+
 // エラー箇所を報告する
 void error_at(char *loc, char *fmt, ...)
 {
@@ -151,6 +157,12 @@ Token *tokenize()
       p += 6;
       continue;
     }
+
+    // Identifier
+    if ('a' <= *p && *p <= 'z') {
+      cur = new_token(TK_IDENT, cur, p++, 1);
+      continue;
+    }
     
     // 複数文字記号
     if (startswith(p, "==") || startswith(p, "!=") || 
@@ -161,7 +173,7 @@ Token *tokenize()
     }
   
     // 一文字記号
-    if (strchr("+-*/()<>;", *p))
+    if (ispunct(*p))
     {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
@@ -203,22 +215,25 @@ Node *primary()
 
   Token *tok = consume_ident();
   if (tok) {
-    Node *node = calloc(1, sizeof(Node));
-    node->kind = ND_LVAR;
+    return new_var_node(*tok->str);
+
+
+    // Node *node = calloc(1, sizeof(Node));
+    // node->kind = ND_LVAR;
     
-    LVar *lvar = find_lvar(tok);
-    if (lvar) {
-      node->offset = lvar->offset;
-    } else {
-      lvar = calloc(1, sizeof(LVar));
-      lvar->next = locals;
-      lvar->name = tok->str;
-      lvar->len = tok->len;
-      lvar->offset = locals->offset + 8;
-      node->offset = lvar->offset;
-      locals = lvar;
-    }
-    return node;
+    // LVar *lvar = find_lvar(tok);
+    // if (lvar) {
+    //   node->offset = lvar->offset;
+    // } else {
+    //   lvar = calloc(1, sizeof(LVar));
+    //   lvar->next = locals;
+    //   lvar->name = tok->str;
+    //   lvar->len = tok->len;
+    //   lvar->offset = locals->offset + 8;
+    //   node->offset = lvar->offset;
+    //   locals = lvar;
+    // }
+    // return node;
   }
 
   // そうでなければ数値のはず

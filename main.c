@@ -33,6 +33,7 @@ int main(int argc, char **argv)
     // はずなので、スタックが溢れないようにポップしておく
     printf("  pop rax\n");
   }
+  printf(".L.return:\n");
   printf("  mov rsp, rbp\n");
   printf("  pop rbp\n");
   printf("  ret\n");

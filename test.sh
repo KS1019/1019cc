@@ -47,7 +47,19 @@ try 0  '1>=2;'
 try 3  '1; 2; 3;'
 
 try 14 'return 14;'
-
 try 1  'return 1; 2;'
+
+try 2  'a=1; b=1; return a + b;'
+try 1  'a=2; b=2; return a / b;'
+try 4  'a=2; b=2; return a * b;'
+try 0  'a=2; b=2; return a - b;'
+
+# Failing test cases - because this compiler currently does not handle multiple variables properly. 
+# Last value assigned to a variable is used as values for all the variables.
+try 6  'a=3; b=2; return a * b;' # You get 4 (2 * 2)
+try 3  'a=1; b=2; return a + b;' # You get 4 (2 + 2)
+try -1 'a=1; b=2; return a - b;' # You get 0 (2 - 2)
+try 2  'a=2; b=1; return a / b;' # You get 1 (1 / 1)
+
 
 echo OK
