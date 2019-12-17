@@ -58,8 +58,8 @@ try 0  'a=2; b=2; return a - b;'
 # Last value assigned to a variable is used as values for all the variables.
 try 6  'a=3; b=2; return a * b;' # You get 4 (2 * 2)
 try 3  'a=1; b=2; return a + b;' # You get 4 (2 + 2)
-try -1 'a=1; b=2; return a - b;' # You get 0 (2 - 2)
-try 2  'a=2; b=1; return a / b;' # You get 1 (1 / 1)
+try 1 'a=2; b=1; return a - b;' # You get 0 (2 - 2)
+try 2 'a=2; b=1; return a / b;' # You get 1 (1 / 1)
 
 
 echo OK

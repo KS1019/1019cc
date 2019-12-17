@@ -9,6 +9,31 @@ void gen_lval(Node *node) {
   printf("  push rax\n");
 }
 
+// Pushes the given node's address to the stack.
+ static void gen_addr(Node *node) {
+   if (node->kind == ND_LVAR) {
+     int offset = (node->name - 'a' + 1) * 8;
+     printf("  lea rax, [rbp-%d]\n", offset);
+     printf("  push rax\n");
+     return;
+   }
+
+    error("not an lvalue");
+ }
+
+  static void load(void) {
+   printf("  pop rax\n");
+   printf("  mov rax, [rax]\n");
+   printf("  push rax\n");
+ }
+
+  static void store(void) {
+   printf("  pop rdi\n");
+   printf("  pop rax\n");
+   printf("  mov [rax], rdi\n");
+   printf("  push rdi\n");
+ }
+
 void gen(Node *node)
 {
   switch (node->kind) {
@@ -21,19 +46,24 @@ void gen(Node *node)
     printf("  jmp .L.return\n");
     return;
   case ND_LVAR:
-    gen_lval(node);
-    printf("  pop rax\n");
-    printf("  mov rax, [rax]\n");
-    printf("  push rax\n");
+    // gen_lval(node);
+    // printf("  pop rax\n");
+    // printf("  mov rax, [rax]\n");
+    // printf("  push rax\n");
+    gen_addr(node);
+    load();
     return;
   case ND_ASSIGN:
-    gen_lval(node->lhs);
-    gen(node->rhs);
+    // gen_lval(node->lhs);
+    // gen(node->rhs);
 
-    printf("  pop rdi\n");
-    printf("  pop rax\n");
-    printf("  mov [rax], rdi\n");
-    printf("  push rdi\n");
+    // printf("  pop rdi\n");
+    // printf("  pop rax\n");
+    // printf("  mov [rax], rdi\n");
+    // printf("  push rdi\n");
+    gen_addr(node->lhs);
+    gen(node->rhs);
+    store();
     return;
   }
 

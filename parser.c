@@ -33,7 +33,7 @@ Node *new_binary(NodeKind kind, Node *lhs, Node *rhs)
   return node;
 }
 
-static Node *new_var_node(char name) {
+Node *new_var_node(char name) {
    Node *node = new_node(ND_LVAR);
    node->name = name;
    return node;
