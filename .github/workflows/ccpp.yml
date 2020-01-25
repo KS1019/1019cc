@@ -9,12 +9,7 @@ jobs:
     - uses: actions/checkout@master
       with:
           fetch-depth: 1
-          path: 1019cc
-    - name: test
-      run: touch pasttest.txt
-    - name: configure
-      run: cd ../../
-    - name: make test
+    - name: make-test
       run: make test
-    - name: make clean
+    - name: make-clean
       run: make clean
