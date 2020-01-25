@@ -9,9 +9,8 @@ jobs:
     - uses: actions/checkout@master
       with:
           fetch-depth: 1
-          path: 1019cc
     - name: configure
-      run: cd 1019cc/ && mkdir build && cd build/
+      run: mkdir build && cd build/
     - name: make test
       run: make test
     - name: make clean
