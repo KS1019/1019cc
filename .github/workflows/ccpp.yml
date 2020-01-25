@@ -10,8 +10,8 @@ jobs:
       with:
           fetch-depth: 1
     - name: configure
-      run: mkdir build && cd build/
+      run: cd ~
     - name: make test
       run: make test
     - name: make clean
-      run: make clean && cd .. && rm -rf build/
+      run: make clean
