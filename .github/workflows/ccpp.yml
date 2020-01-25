@@ -4,10 +4,9 @@ on: [push]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-    env:
-      CC: gcc
+    runs-on:
+      using: 'docker'
+      image: 'Dockerfile'
     steps:
     - uses: actions/checkout@v1
     - name: make
