@@ -6,12 +6,8 @@ jobs:
   build:
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: actions/checkout@v1
-    - name: make
-      env: 
-        CC: gcc
-      run: make
+    - uses: actions/checkout@master
+      with:
+          fetch-depth: 1
     - name: make test
-      env: 
-        CC: gcc
       run: make test
