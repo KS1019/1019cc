@@ -7,7 +7,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      CC: "gcc"
+      CC: gcc
     steps:
     - uses: actions/checkout@v1
     - name: make
