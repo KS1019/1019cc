@@ -8,6 +8,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: make
+      env: 
+        CC: gcc
       run: make
     - name: make test
+      env: 
+        CC: gcc
       run: make test
