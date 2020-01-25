@@ -10,5 +10,7 @@ jobs:
       with:
           fetch-depth: 1
           path: 1019cc
+    - name: cd
+      run: cd 1019cc/
     - name: make test
       run: make test
