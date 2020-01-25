@@ -10,5 +10,7 @@ jobs:
       with:
           fetch-depth: 1
           path: 1019cc/
+    - name: configure
+      run: mkdir build && cd build
     - name: make test
       run: make test
