@@ -9,5 +9,7 @@ jobs:
     - uses: actions/checkout@master
       with:
           fetch-depth: 1
+    - name: configure
+      run: apt-get update && apt-get install -y gcc make git binutils libc6-dev python gdb vim
     - name: make test
       run: make test
