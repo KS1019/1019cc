@@ -10,6 +10,8 @@ jobs:
       with:
           fetch-depth: 1
     - name: make-test
-      run: make test
+      run: |
+          message("Test")
+          make test
     - name: make-clean
       run: make clean
