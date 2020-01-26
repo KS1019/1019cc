@@ -11,7 +11,7 @@ jobs:
           fetch-depth: 1
     - name: make-test
       run: |
-          message("Test")
+          echo testvvv
           make test
     - name: make-clean
       run: make clean
