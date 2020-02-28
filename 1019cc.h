@@ -89,6 +89,7 @@ void expect(char *op);
 int expect_number();
 bool at_eof();
 Token *tokenize();
+Token *consume_ident();
 
 void gen(Node *node);
 void program();
