@@ -159,8 +159,12 @@ Token *tokenize()
     }
 
     // Identifier
-    if ('a' <= *p && *p <= 'z') {
-      cur = new_token(TK_IDENT, cur, p++, 1);
+    if (is_alpha(*p)) {
+      char *q = p++;
+      // is_alumnなのはなぜ？
+      while (is_alpha(*p))
+        p++;
+      cur = new_token(TK_IDENT, cur, q, p - q);
       continue;
     }
     
@@ -217,23 +221,22 @@ Node *primary()
   if (tok) {
     return new_var_node(*tok->str);
 
-
-    // Node *node = calloc(1, sizeof(Node));
-    // node->kind = ND_LVAR;
+    Node *node = calloc(1, sizeof(Node));
+    node->kind = ND_LVAR;
     
-    // LVar *lvar = find_lvar(tok);
-    // if (lvar) {
-    //   node->offset = lvar->offset;
-    // } else {
-    //   lvar = calloc(1, sizeof(LVar));
-    //   lvar->next = locals;
-    //   lvar->name = tok->str;
-    //   lvar->len = tok->len;
-    //   lvar->offset = locals->offset + 8;
-    //   node->offset = lvar->offset;
-    //   locals = lvar;
-    // }
-    // return node;
+    LVar *lvar = find_lvar(tok);
+    if (lvar) {
+      node->offset = lvar->offset;
+    } else {
+      lvar = calloc(1, sizeof(LVar));
+      lvar->next = locals;
+      lvar->name = tok->str;
+      lvar->len = tok->len;
+      lvar->offset = locals->offset + 8;
+      node->offset = lvar->offset;
+      locals = lvar;
+    }
+    return node;
   }
 
   // そうでなければ数値のはず

@@ -59,4 +59,6 @@ try 3  'a=1; b=2; return a + b;'
 try 1 'a=2; b=1; return a - b;'
 try 2 'a=2; b=1; return a / b;'
 
+try 5 'bar=2; foo=3; return bar + foo;'
+
 echo OK
