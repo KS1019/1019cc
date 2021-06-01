@@ -6,12 +6,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
       with:
           fetch-depth: 1
     - name: make-test
       run: |
-          echo "Hello, world!"
+          echo "Hello, world!   !!!"
           make test
     - name: make-clean
       run: make clean
