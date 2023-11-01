@@ -1,6 +1,6 @@
 #include "1019cc.h"
 
-char *user_input;
+char *user_input_parsed;
 Token *token;
 
 // 変数を名前で検索する。見つからなかった場合はNULLを返す。
@@ -45,8 +45,8 @@ void error_at(char *loc, char *fmt, ...)
   va_list ap;
   va_start(ap, fmt);
 
-  int pos = loc - user_input;
-  fprintf(stderr, "%s\n", user_input);
+  int pos = loc - user_input_parsed;
+  fprintf(stderr, "%s\n", user_input_parsed);
   fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
   fprintf(stderr, "^ ");
   vfprintf(stderr, fmt, ap);

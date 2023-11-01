@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -16,7 +18,7 @@ struct LVar {
 };
 
 // ローカル変数
-LVar *locals;
+extern LVar *locals;
 
 // トークンの種類
 typedef enum
@@ -74,7 +76,7 @@ Node *relational();
 Node *add();
 Node *unary();
 
-Node *code[100];
+extern Node *code[100];
 
 // 現在着目しているトークン
 extern Token *token;
