@@ -3,7 +3,7 @@
 Token *token;
 // ローカル変数
 LVar *locals;
-Node* code[100];
+Node *code[100];
 
 // 変数を名前で検索する。見つからなかった場合はNULLを返す。
 LVar *find_lvar(Token *tok) {
@@ -13,22 +13,19 @@ LVar *find_lvar(Token *tok) {
   return NULL;
 }
 
-Node *new_node(NodeKind kind)
-{
+Node *new_node(NodeKind kind) {
   Node *node = calloc(1, sizeof(Node));
   node->kind = kind;
   return node;
 }
 
-Node *new_num(int val)
-{
+Node *new_num(int val) {
   Node *node = new_node(ND_NUM);
   node->val = val;
   return node;
 }
 
-Node *new_binary(NodeKind kind, Node *lhs, Node *rhs)
-{
+Node *new_binary(NodeKind kind, Node *lhs, Node *rhs) {
   Node *node = new_node(kind);
   node->lhs = lhs;
   node->rhs = rhs;
@@ -36,14 +33,13 @@ Node *new_binary(NodeKind kind, Node *lhs, Node *rhs)
 }
 
 Node *new_var_node(char name) {
-   Node *node = new_node(ND_LVAR);
-   node->name = name;
-   return node;
- }
+  Node *node = new_node(ND_LVAR);
+  node->name = name;
+  return node;
+}
 
 // エラー箇所を報告する
-void error_at(char *loc, char *fmt, ...)
-{
+void error_at(char *loc, char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
 
@@ -58,8 +54,7 @@ void error_at(char *loc, char *fmt, ...)
 
 /// エラーを報告するための関数
 // printfと同じ引数を取る
-void error(char *fmt, ...)
-{
+void error(char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
@@ -69,17 +64,16 @@ void error(char *fmt, ...)
 
 // 次のトークンが期待している記号のときには、トークンを1つ読み進める。
 // それ以外の場合にはエラーを報告する。
-void expect(char *op)
-{
-  if (token->kind != TK_RESERVED || strlen(op) != token->len || memcmp(token->str, op, token->len))
+void expect(char *op) {
+  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
+      memcmp(token->str, op, token->len))
     error_at(token->str, "数ではありません\"%s\"", op);
   token = token->next;
 }
 
 // 次のトークンが数値の場合、トークンを1つ読み進めてその数値を返す。
 // それ以外の場合にはエラーを報告する。
-int expect_number()
-{
+int expect_number() {
   if (token->kind != TK_NUM)
     error_at(token->str, "数ではありません");
   int val = token->val;
@@ -87,24 +81,18 @@ int expect_number()
   return val;
 }
 
-bool at_eof()
-{
-  return token->kind == TK_EOF;
-}
+bool at_eof() { return token->kind == TK_EOF; }
 
-Node *assign()
-{
+Node *assign() {
   Node *node = equality();
   if (consume("="))
     node = new_binary(ND_ASSIGN, node, assign());
   return node;
 }
 
-Node *primary()
-{
+Node *primary() {
   // 次のトークンが"("なら、"(" expr ")"のはず
-  if (consume("("))
-  {
+  if (consume("(")) {
     Node *node = expr();
     expect(")");
     return node;
@@ -116,7 +104,7 @@ Node *primary()
 
     Node *node = calloc(1, sizeof(Node));
     node->kind = ND_LVAR;
-    
+
     LVar *lvar = find_lvar(tok);
     if (lvar) {
       node->offset = lvar->offset;
@@ -136,12 +124,10 @@ Node *primary()
   return new_num(expect_number());
 }
 
-Node *mul()
-{
+Node *mul() {
   Node *node = unary();
 
-  for (;;)
-  {
+  for (;;) {
     if (consume("*"))
       node = new_binary(ND_MUL, node, unary());
     else if (consume("/"))
@@ -151,13 +137,9 @@ Node *mul()
   }
 }
 
-Node *expr()
-{
-  return assign();
-}
+Node *expr() { return assign(); }
 
-Node *stmt()
-{
+Node *stmt() {
   Node *node;
 
   if (consume("return")) {
@@ -172,8 +154,7 @@ Node *stmt()
   return node;
 }
 
-Node *equality()
-{
+Node *equality() {
   Node *node = relational();
 
   for (;;) {
@@ -186,8 +167,7 @@ Node *equality()
   }
 }
 
-Node *relational()
-{
+Node *relational() {
   Node *node = add();
 
   for (;;) {
@@ -204,11 +184,9 @@ Node *relational()
   }
 }
 
-Node *add()
-{
+Node *add() {
   Node *node = mul();
-  for (;;)
-  {
+  for (;;) {
     if (consume("+"))
       node = new_binary(ND_ADD, node, mul());
     else if (consume("-"))
@@ -218,8 +196,7 @@ Node *add()
   }
 }
 
-Node *unary()
-{
+Node *unary() {
   if (consume("+"))
     return unary();
   if (consume("-"))
@@ -227,7 +204,7 @@ Node *unary()
   return primary();
 }
 
-Node ** program() {
+Node **program() {
   int i = 0;
   while (!at_eof())
     code[i++] = stmt();
