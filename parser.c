@@ -1,7 +1,9 @@
 #include "1019cc.h"
 
-char *user_input_parsed;
 Token *token;
+// ローカル変数
+LVar *locals;
+Node* code[100];
 
 // 変数を名前で検索する。見つからなかった場合はNULLを返す。
 LVar *find_lvar(Token *tok) {
@@ -45,8 +47,8 @@ void error_at(char *loc, char *fmt, ...)
   va_list ap;
   va_start(ap, fmt);
 
-  int pos = loc - user_input_parsed;
-  fprintf(stderr, "%s\n", user_input_parsed);
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
   fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
   fprintf(stderr, "^ ");
   vfprintf(stderr, fmt, ap);
@@ -225,9 +227,11 @@ Node *unary()
   return primary();
 }
 
-void program() {
+Node ** program() {
   int i = 0;
   while (!at_eof())
     code[i++] = stmt();
   code[i] = NULL;
+
+  return code;
 }

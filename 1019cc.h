@@ -17,9 +17,6 @@ struct LVar {
   int offset; // RBPからのオフセット
 };
 
-// ローカル変数
-extern LVar *locals;
-
 // トークンの種類
 typedef enum
 {
@@ -76,8 +73,6 @@ Node *relational();
 Node *add();
 Node *unary();
 
-extern Node *code[100];
-
 // 現在着目しているトークン
 extern Token *token;
 
@@ -94,4 +89,4 @@ Token *tokenize();
 Token *consume_ident();
 
 void gen(Node *node);
-void program();
+Node** program();
